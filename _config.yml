@@ -6,9 +6,9 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Site Settings
-title: 'Peijie Dong'
+title: 'Zhiyi Chen'
 description: ''
-repository: 'pprp/pprp.github.io'
+repository: 'Cozy000000/Cozy000000.github.io'
 google_scholar_stats_use_cdn: true
 
 # google analytics
@@ -21,14 +21,14 @@ baidu_site_verification: # get baidu_site_verification from https://ziyuan.baidu
 
 # Site Author
 author:
-  name: 'Peijie Dong'
-  avatar: '/images/profile_picture.jpeg'
-  bio: 'PhD student in DSA, The Hong Kong University of Science and Technology (Guang Zhou)'
+  name: 'Zhiyi Chen'
+  avatar: '\images\IMG_0151.JPG'
+  bio: 'UG student major in AI, The Hong Kong University of Science and Technology (Guang Zhou)'
   location: 'Guang Zhou, China'
   employer:
   pubmed:
-  googlescholar: 'https://scholar.google.com/citations?user=TqS6s4gAAAAJ'
-  email: 'dongpeijie98@gmail.com'
+  googlescholar: 'https://scholar.google.com/citations?user=xwUzq7wAAAAJ&hl=en&oi=ao'
+  email: 'czy427214@gmail.com'
   researchgate: # e.g., "https://www.researchgate.net/profile/yourprofile"
   uri:
   bitbucket:
@@ -37,7 +37,7 @@ author:
   flickr:
   facebook:
   foursquare:
-  github: 'pprp'
+  github: 'Cozy000000'
   google_plus:
   keybase:
   instagram:
