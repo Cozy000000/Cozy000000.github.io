@@ -1,0 +1,12 @@
+<nav class="section-nav" aria-label="On this page">
+  <p>On this page</p>
+  <ol>
+    {% for item in site.data.navigation.main %}
+    <li><a href="#{{ item.id }}" data-section="{{ item.id }}"><span class="nav-tick" aria-hidden="true"></span>{{ item.title }}</a></li>
+    {% endfor %}
+  </ol>
+</nav>
+<details class="mobile-sections">
+  <summary>On this page <span aria-hidden="true">+</span></summary>
+  <nav aria-label="Page sections"><ol>{% for item in site.data.navigation.main %}<li><a href="#{{ item.id }}">{{ item.title }}</a></li>{% endfor %}</ol></nav>
+</details>

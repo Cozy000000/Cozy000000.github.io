@@ -18,6 +18,9 @@ gem "jekyll-sass-converter"
 # Markdown parser for GFM
 gem "kramdown-parser-gfm"
 
+# Ruby 3 no longer bundles the HTTP server used by Jekyll 3.
+gem "webrick", "~> 1.8"
+
 gem "wdm", "~> 0.1.0" if Gem.win_platform?
 
 # If you have any plugins, put them here!

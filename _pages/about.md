@@ -1,95 +1,111 @@
 ---
 permalink: /
 title: ''
-excerpt: ''
-author_profile: true
+home: true
 redirect_from:
   - /about/
   - /about.html
 ---
 
-{% if site.google_scholar_stats_use_cdn %}
-{% assign gsDataBaseUrl = "https://cdn.jsdelivr.net/gh/" | append: site.repository | append: "@" %}
-{% else %}
-{% assign gsDataBaseUrl = "https://raw.githubusercontent.com/" | append: site.repository | append: "/" %}
-{% endif %}
-{% assign url = gsDataBaseUrl | append: "google-scholar-stats/gs_data_shieldsio.json" %}
+<section class="profile-hero" aria-labelledby="profile-name">
+  <figure class="profile-photo">
+    <div class="portrait-frame"><img src="{{ site.author.avatar | relative_url }}" alt="Zhiyi Chen" width="5472" height="3648" fetchpriority="high"></div>
+    <figcaption><span class="location-dot" aria-hidden="true"></span> {{ site.author.location }}</figcaption>
+  </figure>
+  <div class="profile-intro">
+    <p class="eyebrow">Artificial intelligence · HKUST(GZ)</p>
+    <h1 id="profile-name">Zhiyi Chen <span lang="zh-CN">陈志屹</span></h1>
+    <p class="profile-role">Undergraduate student &amp; researcher</p>
+    <p class="profile-affiliation">The Hong Kong University of Science and Technology (Guangzhou)</p>
+    <p class="profile-lede">Exploring how to make language models<br class="desktop-break"> more <em>efficient</em> and <em>capable</em>.</p>
+    <div class="social-links" aria-label="Contact and research profiles">
+      <a href="mailto:{{ site.author.email }}">Email <span aria-hidden="true">↗</span></a>
+      <a href="{{ site.author.googlescholar }}" target="_blank" rel="noopener noreferrer">Google Scholar <span aria-hidden="true">↗</span></a>
+      <a href="https://github.com/{{ site.author.github }}" target="_blank" rel="noopener noreferrer">GitHub <span aria-hidden="true">↗</span></a>
+    </div>
+  </div>
+</section>
 
-<span class='anchor' id='about-me'></span>
+{% include section-nav.html %}
 
-I am **Zhiyi Chen** (陈志屹), an Undergraduate Student. candidate in Artificial Intelligence Thrust at the Hong Kong University of Science and Technology (Guangzhou). Under the guidance of [Prof. Zeyi Wen](https://zeyiwen.github.io/). My research interests are in the fields of NLP, efficient large language models, HPO, and machine learning.
+<section class="content-section" id="about-me" aria-labelledby="about-title">
+  <div class="section-heading"><span class="section-number" aria-hidden="true">01</span><h2 id="about-title">About me</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <div class="prose about-prose">
+    <p>I am <strong>Zhiyi Chen (陈志屹)</strong>, an undergraduate studying Artificial Intelligence at <a href="https://www.hkust-gz.edu.cn/" target="_blank" rel="noopener noreferrer">HKUST(GZ)</a>, advised by <a href="https://zeyiwen.github.io/" target="_blank" rel="noopener noreferrer">Prof. Zeyi Wen</a>.</p>
+    <p>My research interests lie in natural language processing, efficient large language models, hyperparameter optimization, and machine learning.</p>
+  </div>
+  <ul class="research-topics" aria-label="Research interests"><li>Natural language processing</li><li>Efficient LLMs</li><li>Hyperparameter optimization</li></ul>
+</section>
 
+<section class="content-section" id="news" aria-labelledby="news-title">
+  <span id="-news" class="legacy-anchor"></span>
+  <div class="section-heading"><span class="section-number" aria-hidden="true">02</span><h2 id="news-title">What's new</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <div class="news-list">
+    <div class="news-item"><time datetime="2026-05">May 2026</time><p><span class="news-label">Award</span> First Prize in the <strong>ASC26 Student Supercomputer Challenge</strong> in Wuxi, Jiangsu.</p></div>
+    <div class="news-item"><time datetime="2025-08">Aug 2025</time><p>Two papers accepted to <strong>EMNLP 2025</strong> (main track, oral) and <strong>CIKM 2025</strong>.</p></div>
+  </div>
+</section>
 
-<!-- **Research Interests**
+<section class="content-section" id="publications" aria-labelledby="publications-title">
+  <span id="-publications" class="legacy-anchor"></span>
+  <div class="section-heading"><span class="section-number" aria-hidden="true">03</span><h2 id="publications-title">Selected publications</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <p class="section-description">Research on efficient learning and language models. <a href="{{ site.author.googlescholar }}" target="_blank" rel="noopener noreferrer">Google Scholar <span aria-hidden="true">↗</span></a></p>
+  <div class="publication-grid">
+    {% for paper in site.data.profile.publications %}
+    <article class="publication" aria-labelledby="{{ paper.id }}-title">
+      <div class="publication-meta"><span class="venue">{{ paper.venue }}</span>{% if paper.distinction %}<span class="distinction">{{ paper.distinction }}</span>{% endif %}<span class="paper-number" aria-hidden="true">0{{ forloop.index }}</span></div>
+      <h3 id="{{ paper.id }}-title"><a href="{{ paper.paper }}" target="_blank" rel="noopener noreferrer">{{ paper.title }}</a></h3>
+      <p class="paper-authors">{{ paper.authors }}</p>
+      <p class="paper-summary">{{ paper.summary }}</p>
+      <div class="paper-links">
+        <a href="{{ paper.paper }}" target="_blank" rel="noopener noreferrer">Paper <span aria-hidden="true">↗</span></a>
+        <a href="{{ paper.pdf }}" target="_blank" rel="noopener noreferrer">PDF <span aria-hidden="true">↗</span></a>
+        <span class="paper-topic">{{ paper.topic }}</span>
+      </div>
+      <details class="citation">
+        <summary>BibTeX <span aria-hidden="true">+</span></summary>
+        <div class="citation-content"><pre><code>{{ paper.bibtex | escape }}</code></pre><button type="button" class="copy-citation" hidden>Copy citation</button><span class="copy-status" role="status" aria-live="polite"></span></div>
+      </details>
+    </article>
+    {% endfor %}
+  </div>
+</section>
 
-My research focuses on enhancing the efficiency and accessibility of deep learning models, particularly in the following areas:
+<section class="content-section" id="education" aria-labelledby="education-title">
+  <span id="-educations" class="legacy-anchor"></span>
+  <div class="section-heading"><span class="section-number" aria-hidden="true">04</span><h2 id="education-title">Education</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <div class="education-list">
+    {% for entry in site.data.profile.education %}
+    <div class="education-item{% if entry.current %} is-current{% endif %}">
+      <p class="education-period">{{ entry.period }}</p>
+      <div><h3>{{ entry.school }}</h3><p class="education-degree">{{ entry.degree }}</p>{% if entry.detail %}<p class="education-detail">{{ entry.detail }}</p>{% endif %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
 
-- Model Compression: Exploring pruning, quantization, and knowledge distillation techniques to reduce model size and computational demands.
-- Efficient Large Language Models: Optimizing LLM training and inference through innovative architectures and deployment strategies.
-- Automated Machine Learning (AutoML): Developing methods to streamline the ML pipeline, from architecture search to hyperparameter optimization.
+<section class="content-section" id="awards" aria-labelledby="awards-title">
+  <span id="-honors-and-awards" class="legacy-anchor"></span>
+  <div class="section-heading"><span class="section-number" aria-hidden="true">05</span><h2 id="awards-title">Honors &amp; awards</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <ul class="awards-list">
+    {% for award in site.data.profile.awards %}
+    <li><span class="award-year">{{ award.year }}</span><div><h3>{{ award.title }}</h3><p>{{ award.event }}</p></div></li>
+    {% endfor %}
+  </ul>
+</section>
 
-My goal is to contribute significantly to the development of more efficient and accessible machine learning systems. Through my research, I strive to push the boundaries of what's possible in model compression, efficient large language models, and automated machine learning. If you share similar interests or would like to discuss potential collaborations, I warmly invite you to reach out to me. I'm always eager to connect with fellow researchers and industry professionals to exchange ideas and explore new opportunities in this exciting field. -->
+<section class="content-section" id="activities" aria-labelledby="activities-title">
+  <span id="-professional-activities" class="legacy-anchor"></span>
+  <div class="section-heading"><span class="section-number" aria-hidden="true">06</span><h2 id="activities-title">Academic activities</h2><span class="section-rule" aria-hidden="true"></span></div>
+  <div class="activity-row"><span class="activity-year">2025</span><p><span class="activity-label">Conferences</span> CIKM <span class="activity-divider" aria-hidden="true">/</span> EMNLP</p></div>
+</section>
 
-# 🔥 News
-- [2026.5] &nbsp;🎉🎉 Frist prize in ASC26 Supercomputer Challenge in Wuxi Jiangsu Province.
-- [2025.8] &nbsp;🎉🎉 One papers accepted by EMNLP'25 main track, and another paper accepted by CIKM'25.
+<section class="contact-strip" aria-label="Contact">
+  <div><p class="eyebrow">Get in touch</p><p class="contact-heading">Let's talk research.</p></div>
+  <a href="mailto:{{ site.author.email }}">{{ site.author.email }} <span aria-hidden="true">↗</span></a>
+</section>
 
-## 📖 Educations
-
-- _2023.09 - now, Hong Kong University of Science and Technology(Guang Zhou) Undergraduate
-
-  - Advisor: Prof. Zeyi Wen
-  - Research Interests: NLP, LLM, HPO
-  <!-- - Achievement: Outstanding Graduate -->
-
-- _2020.09 - 2023.06_, Student in Chengdu No.7 High School
-
-## 💻 Internship
-
-
-
-<!-- # 📕 Teaching
-
-- Teaching Assistant at HKBU
-  - 2023 Spring Semester, COMP7940 Cloud Computing
-  - 2022 Fall Semester, COMP7015 Artiﬁcial Intelligence
-  - 2022 Spring Semester, COMP 7550 IT Project Management
-  - 2021 Fall Semester, COMP 7015, Artificial Intelligence
-  - 2021 Spring Semester, COMP 7930, Big Data Analytics -->
-
-# 👔 Professional Activities
-
-- **2025**:
-  - _Conferences_: CIKM, EMNLP
-  - _Journals_: 
-
-
-# 🎖 Honors and Awards
-- 2026, The First Class Prize of ASC student supercomputer challenge
-- 2025, Gold Medal in iGEM
-- 2025, Bronze Medal, The 50th ICPC Asia Regional Contest (Nanjing)
-- 2025, The Second Class Prize of ASC student supercomputer challenge
-- 2024, Bronze Medal, The 49th ICPC Asia Regional Contest (Shanghai)
-- 2024, Merit Research award in 2024 HKUST(GZ) Undergraduate Research Program
-- 2024, The Second Class Prize of ASC student supercomputer challenge
-- 2024, Bronze Medal, China Collegiate Programming Contest (CCPC) National Invitational (Shandong)
-- 2021, First Prize in the National Biology League for High School Students (Sichuan Province Rank 26) 
-
-# 📝 Publications
-
-Selected papers: EMNLP(Oralx1), CIKMx1.
-
-
-- Xu, Yuebin, **Zhiyi Chen**, and Zeyi Wen. EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference. In EMNLP2025
-
-- Xu, Yuebin, Xuemei Peng, **Zhiyi Chen**, and Zeyi Wen. KALE: Knowledge Aggregation for Label-free Model Enhancement. In CIKM2025
-
-<!--
-[**Project**](https://scholar.google.com/citations?view_op=view_citation&hl=zh-CN&user=DhtAFkwAAAAJ&citation_for_view=DhtAFkwAAAAJ:ALROH1vI_8AC) <strong><span class='show_paper_citations' data='DhtAFkwAAAAJ:ALROH1vI_8AC'></span></strong>
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet.
-</div>
-</div> -->
-
-<!-- - [Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus ornare aliquet ipsum, ac tempus justo dapibus sit amet](https://github.com), A, B, C, **CVPR 2020** -->
-
-<script type="text/javascript" id="clustrmaps" src="//clustrmaps.com/map_v2.js?d=WLf9b66ilDZRnTA1p3jOxQp-T_d738h0cJKCEfhFM8s&cl=ffffff&w=a"></script>
+<details class="visitor-map">
+  <summary>Visitors around the world <span aria-hidden="true">+</span></summary>
+  <div class="visitor-map-content" data-map-src="https://clustrmaps.com/map_v2.js?d=WLf9b66ilDZRnTA1p3jOxQp-T_d738h0cJKCEfhFM8s&amp;cl=faf9f5&amp;w=a"></div>
+</details>

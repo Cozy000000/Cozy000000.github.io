@@ -1,0 +1,76 @@
+publications:
+  - id: ecotune
+    short_name: EcoTune
+    title: 'EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference'
+    authors: 'Yuebin Xu, <strong>Zhiyi Chen</strong>, and Zeyi Wen'
+    venue: EMNLP 2025
+    distinction: Oral
+    topic: Efficient LLMs
+    summary: 'Optimizing inference hyperparameters with token-aware evaluation and adaptive budgets.'
+    paper: https://aclanthology.org/2025.emnlp-main.394/
+    pdf: https://aclanthology.org/2025.emnlp-main.394.pdf
+    bibtex: |
+      @inproceedings{xu-etal-2025-ecotune,
+        title = {EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference},
+        author = {Xu, Yuebin and Chen, Zhiyi and Wen, Zeyi},
+        booktitle = {Proceedings of the 2025 Conference on Empirical Methods in Natural Language Processing},
+        year = {2025},
+        pages = {7735--7745},
+        doi = {10.18653/v1/2025.emnlp-main.394},
+        url = {https://aclanthology.org/2025.emnlp-main.394/}
+      }
+  - id: kale
+    short_name: KALE
+    title: 'KALE: Knowledge Aggregation for Label-free Model Enhancement'
+    authors: 'Yuebin Xu, Xuemei Peng, <strong>Zhiyi Chen</strong>, and Zeyi Wen'
+    venue: CIKM 2025
+    topic: Model enhancement
+    summary: 'Combining model knowledge to improve performance without labeled training data.'
+    paper: https://doi.org/10.1145/3746252.3761019
+    pdf: https://zeyiwen.github.io/papers/cikm2025_kale.pdf
+    bibtex: |
+      @inproceedings{xu2025kale,
+        title = {KALE: Knowledge Aggregation for Label-free Model Enhancement},
+        author = {Xu, Yuebin and Peng, Xuemei and Chen, Zhiyi and Wen, Zeyi},
+        booktitle = {Proceedings of the 34th ACM International Conference on Information and Knowledge Management},
+        year = {2025},
+        doi = {10.1145/3746252.3761019},
+        url = {https://doi.org/10.1145/3746252.3761019}
+      }
+education:
+  - period: '2023 — Present'
+    school: Hong Kong University of Science and Technology (Guangzhou)
+    degree: Undergraduate in Artificial Intelligence
+    detail: 'Advisor: Prof. Zeyi Wen'
+    current: true
+  - period: '2020 — 2023'
+    school: Chengdu No. 7 High School
+    degree: High school
+awards:
+  - year: 2026
+    title: First Prize
+    event: ASC Student Supercomputer Challenge
+  - year: 2025
+    title: Gold Medal
+    event: International Genetically Engineered Machine (iGEM) Competition
+  - year: 2025
+    title: Bronze Medal
+    event: 50th ICPC Asia Regional Contest · Nanjing
+  - year: 2025
+    title: Second Prize
+    event: ASC Student Supercomputer Challenge
+  - year: 2024
+    title: Bronze Medal
+    event: 49th ICPC Asia Regional Contest · Shanghai
+  - year: 2024
+    title: Merit Research Award
+    event: HKUST(GZ) Undergraduate Research Program
+  - year: 2024
+    title: Second Prize
+    event: ASC Student Supercomputer Challenge
+  - year: 2024
+    title: Bronze Medal
+    event: CCPC National Invitational · Shandong
+  - year: 2021
+    title: First Prize
+    event: National Biology League for High School Students · Sichuan, rank 26

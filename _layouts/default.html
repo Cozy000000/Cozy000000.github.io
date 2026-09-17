@@ -1,33 +1,17 @@
----
-layout: compress
----
-
 <!doctype html>
-<html lang="en" class="no-js">
+<html lang="{{ page.lang | default: 'en' }}" data-theme="light">
   <head>
     {% include head.html %}
     {% include head/custom.html %}
   </head>
-
-  <body>
-
-    {% include browser-upgrade.html %}
+  <body id="top"{% if page.home %} class="home-page"{% endif %}>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="reading-progress" aria-hidden="true"></div>
     {% include masthead.html %}
-
-    <div id="main" role="main">
-      {% include sidebar.html %}
-    
-      <article class="page" itemscope itemtype="http://schema.org/CreativeWork">
-        {% if page.title %}<meta itemprop="headline" content="{{ page.title | markdownify | strip_html | strip_newlines | escape_once }}">{% endif %}
-        <div class="page__inner-wrap">
-          <section class="page__content" itemprop="text">
-            {{ content }}
-          </section>
-        </div>
-      </article>
-    </div>
-
+    <main id="main" class="site-main{% unless page.home %} inner-page{% endunless %}">
+      {{ content }}
+    </main>
+    {% include footer.html %}
     {% include scripts.html %}
-
   </body>
 </html>

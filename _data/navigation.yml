@@ -1,28 +1,13 @@
-# main links links
 main:
-  - title: 'About Me'
-    url: '/#about-me'
-
-  - title: 'News'
-    url: '/#-news'
-
-  - title: 'Publications'
-    url: '/#-publications'
-
-  - title: 'Honors and Awards'
-    url: '/#-honors-and-awards'
-
-  - title: 'Educations'
-    url: '/#-educations'
-
-  # - title: "Invited Talks"
-  #   url: "/#-invited-talks"
-
-  # - title: "Internships"
-  #   url: "/#-internships"
-
-  - title: "Blog"
-    url: "/blog/"
-
-  - title: "Diagram"
-    url: "/drawing/"
+  - title: About
+    id: about-me
+  - title: News
+    id: news
+  - title: Publications
+    id: publications
+  - title: Education
+    id: education
+  - title: Awards
+    id: awards
+  - title: Activities
+    id: activities

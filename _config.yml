@@ -7,7 +7,9 @@
 
 # Site Settings
 title: 'Zhiyi Chen'
-description: ''
+description: 'Zhiyi Chen, an undergraduate in Artificial Intelligence at HKUST(GZ), working on natural language processing, efficient language models, and hyperparameter optimization.'
+url: 'https://cozy000000.github.io'
+baseurl: ''
 repository: 'Cozy000000/Cozy000000.github.io'
 google_scholar_stats_use_cdn: true
 
@@ -22,9 +24,9 @@ baidu_site_verification: # get baidu_site_verification from https://ziyuan.baidu
 # Site Author
 author:
   name: 'Zhiyi Chen'
-  avatar: '\images\IMG_0151.JPG'
-  bio: 'UG student major in AI, The Hong Kong University of Science and Technology (Guang Zhou)'
-  location: 'Guang Zhou, China'
+  avatar: '/images/IMG_0151.JPG'
+  bio: 'Undergraduate in Artificial Intelligence · HKUST(GZ)'
+  location: 'Guangzhou, China'
   employer:
   pubmed:
   googlescholar: 'https://scholar.google.com/citations?user=xwUzq7wAAAAJ&hl=en&oi=ao'
@@ -90,6 +92,8 @@ exclude:
   - package.json
   - tmp
   - vendor
+  - environment.yml
+  - run_server.sh
 keep_files:
   - .git
   - .svn
