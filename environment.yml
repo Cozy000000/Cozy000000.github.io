@@ -3,8 +3,4 @@ channels:
   - conda-forge
   - nodefaults
 dependencies:
-  - ruby=3.1
-  - c-compiler
-  - cxx-compiler
-  - make
-  - pkg-config
+  - nodejs>=22.12,<23

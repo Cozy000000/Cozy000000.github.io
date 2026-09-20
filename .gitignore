@@ -4,3 +4,11 @@ vendor
 _site
 .DS_Store
 .sass-cache/*
+node_modules/
+dist/
+src/generated/
+.vite/
+test-results/
+playwright-report/
+tmp/
+output/

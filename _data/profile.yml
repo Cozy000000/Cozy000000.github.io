@@ -1,14 +1,62 @@
+# The single source of truth for public homepage content.
+site:
+  title: Zhiyi Chen
+  description: Zhiyi Chen, an undergraduate in Artificial Intelligence at HKUST(GZ), working on natural language processing, efficient language models, and hyperparameter optimization.
+  url: https://cozy000000.github.io
+  language: en
+author:
+  name: Zhiyi Chen
+  nativeName: 陈志屹
+  role: Undergraduate student & researcher
+  bio: an undergraduate studying Artificial Intelligence
+  affiliation: Hong Kong University of Science and Technology (Guangzhou)
+  affiliationShort: HKUST(GZ)
+  affiliationUrl: https://www.hkust-gz.edu.cn/
+  advisor: Prof. Zeyi Wen
+  advisorUrl: https://zeyiwen.github.io/
+  location: Guangzhou, China
+  email: czy427214@gmail.com
+  scholar: https://scholar.google.com/citations?user=xwUzq7wAAAAJ&hl=en&oi=ao
+  github: https://github.com/Cozy000000
+  avatar: /images/profile.webp
+intro: Exploring how to make language models more efficient and capable.
+research:
+  description: My research interests lie in natural language processing, efficient large language models, hyperparameter optimization, and machine learning.
+  topics:
+    - Natural language processing
+    - Efficient LLMs
+    - Hyperparameter optimization
+highlights:
+  - label: ASC26
+    text: First Prize in the ASC26 Student Supercomputer Challenge.
+    href: '#awards'
+  - paperId: ecotune
+  - paperId: kale
+news:
+  - date: '2026-05'
+    label: Award
+    text: First Prize in the ASC26 Student Supercomputer Challenge in Wuxi, Jiangsu.
+  - date: '2025-08'
+    text: Two papers accepted to EMNLP 2025 (main track, oral) and CIKM 2025.
+featured:
+  - ecotune
+  - kale
 publications:
   - id: ecotune
     short_name: EcoTune
     title: 'EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference'
-    authors: 'Yuebin Xu, <strong>Zhiyi Chen</strong>, and Zeyi Wen'
+    authors: ['Yuebin Xu', 'Zhiyi Chen', 'Zeyi Wen']
     venue: EMNLP 2025
     distinction: Oral
     topic: Efficient LLMs
     summary: 'Optimizing inference hyperparameters with token-aware evaluation and adaptive budgets.'
     paper: https://aclanthology.org/2025.emnlp-main.394/
     pdf: https://aclanthology.org/2025.emnlp-main.394.pdf
+    figure:
+      src: /images/papers/ecotune.webp
+      alt: EcoTune system overview with configuration selection, fidelity allocation, and token budget management.
+      source: https://aclanthology.org/2025.emnlp-main.394.pdf#page=1
+      label: 'Figure 1(b) · EcoTune system overview'
     bibtex: |
       @inproceedings{xu-etal-2025-ecotune,
         title = {EcoTune: Token-Efficient Multi-Fidelity Hyperparameter Optimization for Large Language Model Inference},
@@ -22,12 +70,17 @@ publications:
   - id: kale
     short_name: KALE
     title: 'KALE: Knowledge Aggregation for Label-free Model Enhancement'
-    authors: 'Yuebin Xu, Xuemei Peng, <strong>Zhiyi Chen</strong>, and Zeyi Wen'
+    authors: ['Yuebin Xu', 'Xuemei Peng', 'Zhiyi Chen', 'Zeyi Wen']
     venue: CIKM 2025
     topic: Model enhancement
     summary: 'Combining model knowledge to improve performance without labeled training data.'
     paper: https://doi.org/10.1145/3746252.3761019
     pdf: https://zeyiwen.github.io/papers/cikm2025_kale.pdf
+    figure:
+      src: /images/papers/kale.webp
+      alt: KALE overview showing knowledge aggregation through model fusion and adaptive representation alignment.
+      source: https://zeyiwen.github.io/papers/cikm2025_kale.pdf#page=3
+      label: 'Figure 2 · KALE method overview'
     bibtex: |
       @inproceedings{xu2025kale,
         title = {KALE: Knowledge Aggregation for Label-free Model Enhancement},
@@ -74,3 +127,13 @@ awards:
   - year: 2021
     title: First Prize
     event: National Biology League for High School Students · Sichuan, rank 26
+activities:
+  - year: 2025
+    text: 'Conferences: CIKM / EMNLP'
+diagram:
+  title: Research diagram
+  src: "https://viewer.diagrams.net/?tags=%7B%7D&lightbox=1&highlight=0000ff&edit=_blank&layers=1&nav=1&title=Untitled%20Diagram.drawio&dark=auto#R%3Cmxfile%3E%3Cdiagram%20name%3D%22Page-1%22%20id%3D%22p_7TRpUL9nB0_viv2l-K%22%3E1Zvbdto4FIafhst0SZaPl2CYGVahQ0smnebOYyvgFWNRWQ7Qpx8Z22BZkNIZZMRVYPuA9f3%2FlrR3oIf81fZ3GqyXUxLhpGeAaNtDw55hQMs1%2BZ8isisjrg3KwILGURlqBObxD1xdWUfzOMJZFStDjJCExWsxGJI0xSETYgGlZCOe9kKSSAisgwWWAvMwSOTo1zhiy2oUFjjG%2F8DxYll%2FMgTVkVVQn1wFsmUQkU0jhEY95FNCWPlqtfVxUsATufx25ujhwShO2SUXTL97r6tP8K%2FJ01s%2FGCf%2B4%2FP34AF55W3egiSvRlxr6JPVmuIsi0laDYDtaiqU5GmEixvDHhpsljHD83UQFkc33Ac8FtCwEpOjQoOMUfJ6IMjHPqg%2BF1OGt2dHBA%2BcuMEwWWFGd%2FyU6oKabGUty6zusDkKBW2jjC0bItWDDipvLA53PuLjLyqCv0DTBBLNGc3TOF1oShABQ0DoehJBx%2B0SIJQAfkzJJsERz1IDDOOMxUkSMI09aXoCUQQt2ZT1pNgNU0Ni%2BgnnNCgu7NOw4BSynBZ855gjWupKFolePZXuHG2XZJFE9nMepCz%2BobVDXSRwdGxHdih0uuRoShxHLy9xGBcjMsBkMm1ZNdMVbcuinodOWNTrEq11ckXC9OEZU9Iz7B6foQoeY386MUyJq4yJb2PWxcE1JSHfHZyhnZWowQdgXgftIdt34tovmNaWydpIFVlbIjuc9xtEi0l2PJvrDdUVoEIk%2BxUC1CVVR94ADNtercmi%2ByFr1Ha5HVlXItvPGfk4FCYB%2F0lrqpZIFVnyftXtFKpcPs0C%2Buw3mPb7%2FbFh6cxU3LCajiEzhR0yteQiiu%2F7v%2F752IDqP82%2B6G1UR4BquXIV4Ha5WllyYTWafr6r1BdtanvujW0ql1Xzx8F%2Br9qAOvmid%2B6LNnWhXFLVzu0GqlxRzdfj9AXTBtVRTsl8l2kNtrX8e%2FUuUFj%2BjS7JyjVW3x%2FgtCj3xSJAZ6xALAL4DupE7eqdqF3VcZULLIlfmNO3Q22asYCyftGZ5oGUpPwcLkNUR%2F5JSPhahLYx%2B3sPj%2BdE%2BfYbf%2FvAYcL9Ffzh98frN9%2F2J%2FMNCRoci2Fw4L7voL1LnT8yyWmI3xlsXabyISwwe29fBE7rSHHRvHsTn%2BSUJvtLOZNg1zhhTeKUZY07z4pAo%2FwGTssebkvf8o5HtQ%2BP9j8MINeB1zaAfYcGOJPI3RoAIbMDA8gl61UNABvqV%2FrqLr6hVnxhwr6GgnJprDKFwQfvHkREOmSwU1VJajNYruJVruF3or%2Bpg%2F4QQEO9AWy55aBwCudDPK%2B%2BpVL8%2Bv%2FTPxffuoX4pmML4ltdSC83RhRK7723ddNEelsH6aFtdaC93MK58rzvWL%2BwdVerP7xUf0cH%2FeuvnajVX%2B42qdT%2FJ%2Bu%2BJvK7OsiPPNiB%2FHJL7NryQ23S37hUf08H%2FS3QQeFuK2%2FdOVCX9L9Ufusmjbu2%2FHb19SO18itv3HnaZD%2B6VP6btO3a8jsIdCC%2F4radKP9Nk%2F9i9RX37S5T362eV636ylt%2BGq395qX636Tl19bfszpo%2BdnKW376rP0Xy3%2BTjp9U%2BYNKm%2F%2BoP397%2FE1Nefrxl0lo9C8%3D%3C%2Fdiagram%3E%3C%2Fmxfile%3E"
+# Site-specific Flag Counter created without an account; see docs/visitor-map.md.
+visitorMap:
+  imageUrl: https://s01.flagcounter.com/map/YywQ/size_m/txt_202127/border_DED9D6/pageviews_0/viewers_0/flags_1/
+  statsUrl: https://info.flagcounter.com/YywQ
