@@ -1,6 +1,6 @@
 # Zhiyi Chen · Personal website
 
-A React academic homepage for Zhiyi Chen, built with TypeScript, Vite, Tailwind CSS, Framer Motion, and Lucide icons. The site presents research, publications, education, awards, and academic activities with an Asuka-inspired red, amber, and charcoal palette, responsive layouts, light/dark themes, and accessible section navigation.
+A React academic homepage for Zhiyi Chen, built with TypeScript, Vite, Tailwind CSS, Framer Motion, and Lucide icons. The site presents research, publications, education, awards, and academic activities with a red, amber, and pale pink palette, responsive layouts, light/dark themes, and accessible section navigation.
 
 ## Run in the cozy-site Conda environment
 
@@ -13,7 +13,7 @@ bash scripts/with-cozy-env.sh npm ci
 bash run_server.sh
 ```
 
-For the existing environment (previously used for Jekyll):
+For an existing environment:
 
 ```bash
 conda env update -n cozy-site -f environment.yml
@@ -22,7 +22,7 @@ bash scripts/with-cozy-env.sh npm ci
 bash run_server.sh
 ```
 
-The environment supplies Node.js 22 (at least 22.12) and npm. Updating it does not remove existing Ruby packages. `run_server.sh` automatically selects `cozy-site` when called outside the environment and checks that Node belongs to it. Open the URL printed by Vite, normally <http://127.0.0.1:5173/>. YAML and Markdown edits reload the development site.
+The environment supplies Node.js 22 (at least 22.12) and npm. `run_server.sh` automatically selects `cozy-site` when called outside the environment and checks that Node belongs to it. Open the URL printed by Vite, normally <http://127.0.0.1:5173/>. YAML and Markdown edits reload the development site.
 
 The wrapper `bash scripts/with-cozy-env.sh <command>` selects the environment and prepends its `bin` directory, including in IDE shells whose PATH still prefers a system Node. Use it for installation and checks as well as the server.
 
@@ -32,7 +32,7 @@ The wrapper `bash scripts/with-cozy-env.sh <command>` selects the environment an
 | --- | --- |
 | `_data/profile.yml` | Site metadata, identity, contacts, research, news, paper records, highlights, education, awards, activities, diagram, and visitor map |
 | `_posts/` | Markdown blog articles with YAML front matter |
-| `public/images/` | Optimized portrait, research figures, and existing icons |
+| `public/images/` | Current portrait, research figures, and site icons |
 | `src/components/` | React page components |
 | `src/styles.css` | Layout, typography, colors, and responsive styling |
 | `docs/asset-sources.md` | Research figure sources and image preparation details |
@@ -79,20 +79,20 @@ Browser verification (after a build):
 bash scripts/with-cozy-env.sh npm run test:browser
 ```
 
-On macOS this uses installed Google Chrome. On other systems, install Playwright Chromium first with `bash scripts/with-cozy-env.sh npx playwright install chromium`. The suite serves `dist/` on a dedicated local port, verifies direct URLs and interactions, and writes light/dark screenshots at 375, 768, and 1440px to ignored `output/site-review/`. It isolates external diagram and map services so tests do not generate visitor statistics. Reference captures are optional and require the temporary reference preview at port 4174.
+On macOS this uses installed Google Chrome. On other systems, install Playwright Chromium first with `bash scripts/with-cozy-env.sh npx playwright install chromium`. The suite serves `dist/` on a dedicated local port, verifies direct URLs and interactions, and writes light/dark screenshots at 375, 768, and 1440px to ignored `output/site-review/`. It isolates external diagram and map services so tests do not generate visitor statistics.
 
 ## GitHub Pages
 
-The workflow checks the project and publishes only `dist/` through GitHub Pages Actions. At rollout, set **Settings → Pages → Source → GitHub Actions**. Local development and checks do not push commits or change the live site.
+The workflow checks the project and publishes only `dist/` through GitHub Pages Actions. This repository's **Settings → Pages → Source** is configured as **GitHub Actions**; use the same setting when creating a copy of the site. Local development and checks do not push commits or change the live site.
 
-The site URL remains `https://cozy000000.github.io`, with a root deployment base. Original photos remain in `images/`; only the optimized copies in `public/` are deployed. No draft Markdown, generated development files, Ruby dependencies, or PDF source downloads are deployed.
+The site URL remains `https://cozy000000.github.io`, with a root deployment base. The two original personal photographs remain in `images/`; website images are maintained in `public/images/`. Previous avatars and unused image variants are archived in ignored `local-backups/`, alongside restoration notes. Backups, draft Markdown, development files, and PDF source downloads are not deployed.
 
 ## Migration notes
 
 - Homepage navigation now follows the reference layout; Blog and Diagram links live in the footer.
 - Existing publication links, BibTeX, education, awards, activities, legacy anchors, and the diagram embed are preserved.
 - No CV or citation metrics are displayed without corresponding personal data. The footer displays this site's Flag Counter world map automatically, with timeout handling and manual retry. See [visitor map details](docs/visitor-map.md).
-- Jekyll templates and obsolete theme assets have been retired. The original source remains recoverable from Git history; original personal assets, the draft, and `LICENSE` are retained.
+- Jekyll templates, local Ruby dependencies and caches, old build output, unused Scholar crawler, template images, duplicate icons, and the temporary reference-capture script have been removed. The original source remains recoverable from Git history; original personal photographs, local avatar backups, the draft, and `LICENSE` are retained.
 
 ## Acknowledgments
 

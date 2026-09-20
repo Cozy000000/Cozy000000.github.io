@@ -1,6 +1,6 @@
 # Website image sources
 
-The original photos and icons remain in `images/`. Optimized website assets live in `public/images/`; Vite serves them at `/images/`.
+The original personal photographs remain in `images/`. Current website assets live in `public/images/`; Vite serves them at `/images/`. Unused avatar variants are archived in local-only `local-backups/legacy-images-2026-09-21/`; duplicate icons and template placeholder images have been removed.
 
 ## Research figures
 
@@ -32,8 +32,10 @@ Suggested accessible descriptions:
 
 ## Portrait
 
-`profile.webp` derives from the existing `images/IMG_0151.JPG` (5472 × 3648 px). It preserves the old homepage's focus using its 44% horizontal position, 1.65 scale, 83% vertical transform origin, and 0.78 saturation, adapted to the new square portrait. The crop is `(1435, 1193, 3646, 3404)`, downsampled with Lanczos to 768 × 768 px and encoded as WebP at quality 85. The result is 96,282 bytes; the original photo is unchanged. The new UI should display this square asset directly without repeating the old CSS transform.
+`profile-deer.png` is the author's uploaded photo with deer, provided on 2026-09-21 (800 × 533 px). It is copied without modifying the image. The square homepage frame uses `object-fit: cover` and `object-position: left center` to keep the author visible; social previews use the full original image.
+
+The previous 768 × 768 `profile.webp` avatar and its original `images/IMG_0151.JPG` were backed up locally in `local-backups/avatar-2026-09-21/`, with restoration instructions. That directory is ignored by Git and excluded from the public assets. The original photo in `images/` remains unchanged.
 
 ## Icons and web manifest
 
-The existing llama favicon, Apple touch icon, and Android icons were copied unchanged from `images/`. The copied manifest now names Zhiyi Chen, points its icon URLs to `/images/`, sets the homepage as its start URL, and uses the warm page background. No icon or photograph from the reference website is used.
+The existing llama favicon, Apple touch icon, and Android icons are maintained in `public/images/`. They were originally copied unchanged from `images/`; the duplicate originals were removed after verifying identical SHA-256 hashes. The current manifest names Zhiyi Chen, points its icon URLs to `/images/`, sets the homepage as its start URL, and uses the warm page background. No icon or photograph from the reference website is used.

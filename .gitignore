@@ -1,9 +1,4 @@
-
-.bundle
-vendor
-_site
 .DS_Store
-.sass-cache/*
 node_modules/
 dist/
 src/generated/
@@ -12,3 +7,4 @@ test-results/
 playwright-report/
 tmp/
 output/
+/local-backups/

@@ -6,11 +6,15 @@ The homepage now follows the reference site's typography, square portrait and ic
 
 The figure and portrait provenance is documented in [asset-sources.md](asset-sources.md). Original photographs, the unpublished Markdown draft, and LICENSE are unchanged. Homepage content now lives in `_data/profile.yml`; featured papers and highlights use paper IDs instead of duplicate publication records.
 
-## Asuka palette update
+## Palette updates
 
-The requested Asuka-inspired palette replaces the original earth tones with red, amber, and charcoal. Red marks links, section rules, and portrait borders; amber accents the theme switch, portrait frame, and distinction badges. Light mode uses an off-white page with a pale red introduction, while dark mode uses charcoal surfaces and lighter red text. Theme metadata, the manifest, and the visitor-map color are synchronized. Paper figures retain their original colors and white backgrounds.
+The first palette update replaced the original earth tones with Asuka-inspired red, amber, and charcoal. Red marked links, section rules, and portrait borders; amber accented the theme switch, portrait frame, and distinction badges.
 
-After this color update, the production build and ESLint passed in `cozy-site`, and all six existing homepage browser checks passed at 375, 768, and 1440px in both themes. Updated desktop light/dark and mobile screenshots were inspected. Main text, muted text, links, and badge colors were checked against their surface colors: the lowest tested contrast was 4.69:1 in light mode and 6.35:1 in dark mode.
+After that initial color update, the production build and ESLint passed in `cozy-site`, and all six existing homepage browser checks passed at 375, 768, and 1440px in both themes. Updated desktop light/dark and mobile screenshots were inspected. Main text, muted text, links, and badge colors were checked against their surface colors: the lowest tested contrast was 4.69:1 in light mode and 6.35:1 in dark mode.
+
+The current palette replaces charcoal decoration with pale pink (`#f3bfd0`), retaining red and amber. Light mode uses pink-white page and footer backgrounds; dark mode uses deep rose surfaces with the same pale pink accents. The top stripe, reading-progress bar, and third highlight card use all three theme colors. Text uses dark rose in light mode and light rose in dark mode. Browser theme metadata, the manifest, and visitor-map text/border colors match the updated palette; photographs and scientific figures keep their original colors.
+
+The pale-pink update passes TypeScript, production build, and ESLint checks. Contrast calculations across 23 text/background combinations per theme give minima of 5.35:1 in light mode and 5.34:1 in dark mode.
 
 ## Verification performed
 
@@ -34,4 +38,8 @@ The GitHub Pages workflow builds and uploads only `dist/`. `/`, `/blog/`, `/draw
 
 Motion's two transitive packages are pinned alongside Framer Motion: newer otherwise-compatible ranges removed a required export. The lockfile captures the working combination.
 
-No commit, push, Pages-settings change, or live deployment was performed. At rollout, review the local preview and select GitHub Actions as the repository's Pages source. Existing Jekyll source can be recovered from Git history; the old Ruby packages were left in the user's Conda environment.
+The migration was subsequently committed and pushed as `4dd28df`. The Pages source was switched from legacy branch builds to GitHub Actions to prevent the old Jekyll deployment from overwriting the React build. The Actions build and deployment succeeded, and the deployed HTML, JavaScript, and CSS were checked.
+
+## Local cleanup
+
+On 2026-09-21, obsolete Jekyll directories, project-local Ruby dependencies and caches, the old `_site/` output, the unused Scholar crawler, template screenshot and placeholder, duplicate icons, and the one-off reference-capture script were removed. The original personal photographs, unpublished draft, license, current React tooling, and browser tests remain. Unused avatar/image variants were copied byte-for-byte into ignored `local-backups/legacy-images-2026-09-21/` before removal from the source tree. This cleanup does not modify the Conda environment; earlier Jekyll source is recoverable from Git history.
