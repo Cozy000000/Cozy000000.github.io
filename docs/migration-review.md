@@ -22,17 +22,17 @@ The pale-pink update passes TypeScript, production build, and ESLint checks. Con
 - TypeScript, ESLint (no warnings), and production build pass.
 - 8 content tests pass: publication filtering, route generation/collisions, Shanghai dates, Markdown/sanitization, math support, safe metadata, and non-mutating draft handling.
 - 3 static-build tests pass: real HTML routes and metadata, feed/sitemap/assets, and absence of draft text/reference identity in the browser bundle.
-- 12 browser tests pass against a plain static server: six viewport/theme combinations, persistent theme, successful clipboard copy and permission fallback, keyboard mobile navigation, desktop scroll/legacy anchors, direct navigation/reloads/redirects/404, and lazy-map failure isolation.
+- 19 browser tests pass against a plain static server: 12 cover viewport/theme combinations, clipboard, navigation, static routes and the configured footer map; 7 cover the map's StrictMode lifecycle, script failure/retry, delayed data, timeout recovery, stale requests, message isolation and responsive sizing.
 - An isolated development fixture verified YAML and Markdown auto-reload and newly added article addresses without changing actual site content.
 - Light/dark screenshots at 375, 768 and 1440px were compared with a temporary reference preview. No horizontal overflow, clipped figure labels, missing images, or JavaScript page errors were observed.
 
-Browser tests mock the third-party diagram response and map failure to avoid external availability or visitor tracking affecting the results. They retain and verify the actual configured URL. This is local validation, not verification of a deployed production website.
+Browser tests mock the third-party diagram response and map data to avoid external availability or visitor tracking affecting the results. They retain and verify the actual configured URL. The real MapMyVisitors widget was also checked once in Chrome at desktop/mobile sizes and both themes, with no failed requests or script errors and only one widget script load. This is local validation, not verification of a deployed production website.
 
 Screenshots are local generated artifacts in `output/site-review/` (ignored by Git). Full homepage files are `home-<width>-<theme>.png`; first-screen crops append `-first-screen`. Matching reference first-screen captures are `reference-<width>-<theme>.png`.
 
 ## Build and rollout
 
-The visitor map was subsequently replaced with a site-specific Flag Counter image (`YywQ`) because the original ClustrMaps endpoint could not be reached and its identifier was rejected by MapMyVisitors. The footer now loads the map directly, with error/timeout handling and manual retry. See [visitor-map.md](visitor-map.md) for diagnostics, configuration, and service limitations. The earlier lazy-map migration check describes the previous implementation.
+The visitor map was initially replaced with a site-specific Flag Counter image (`YywQ`) because the original ClustrMaps endpoint could not be reached and its identifier was rejected by MapMyVisitors. On 2026-09-28, the owner supplied a new MapMyVisitors embed registered for this site, with statistics at `/web/1c8ic`. The footer now loads that interactive map inside an isolated iframe, with responsive sizing, error/timeout handling and manual retry. Theme changes keep the same widget instance. See [visitor-map.md](visitor-map.md) for the current configuration and behavior. The earlier lazy-map migration check describes the previous implementation.
 
 The GitHub Pages workflow builds and uploads only `dist/`. `/`, `/blog/`, `/drawing/` and published article URLs have physical HTML files; `/about/` and `/about.html` redirect to `/` while preserving query and fragment. Pages retain individual metadata, and the build emits sitemap and Atom feed. React renders body content in the browser.
 

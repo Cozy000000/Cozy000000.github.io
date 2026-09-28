@@ -43,7 +43,7 @@ export interface Profile {
   awards: { year: number; title: string; event: string }[];
   activities: { year: number; text: string }[];
   diagram: { title: string; src: string };
-  visitorMap: { imageUrl: string; statsUrl: string } | null;
+  visitorMap: { scriptUrl: string; statsUrl: string } | null;
 }
 
 export interface PublishedPost {

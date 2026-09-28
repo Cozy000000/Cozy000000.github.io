@@ -2,19 +2,11 @@ import { test, expect } from '@playwright/test';
 import { build } from 'esbuild';
 import { mkdir, readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
+import { mapScriptRoute, mapWidgetMock } from './mapmyvisitors-fixture';
 
-// Fixtures use the real component but never record visits or ship test artwork.
 const fixturePath = '/__visitor-map-fixture__';
-const providerRoute = 'https://s01.flagcounter.com/**';
-const imageUrl = 'https://s01.flagcounter.com/map/TEST-FIXTURE/size_m/';
-const statsUrl = 'https://info.flagcounter.com/TEST-FIXTURE/';
-const mockMap = `<svg xmlns="http://www.w3.org/2000/svg" width="420" height="240" viewBox="0 0 420 240">
-  <rect width="420" height="240" fill="#f0ece9"/>
-  <rect x="20" y="20" width="380" height="200" rx="8" fill="#fff" stroke="#ded9d6"/>
-  <path d="M76 83l42-20 33 21-13 34-25 14-17-27z M160 144l22 9-3 40-19-9-9-25z M221 78l49-13 62 23 5 31-45 4-17 29-22-35-30-9z M308 164l36-9 15 26-37 12z" fill="#ded9d6"/>
-  <text x="210" y="48" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#202127">Mock visitor map</text>
-  <text x="210" y="214" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#6c6770">Browser test fixture — no real visitor data</text>
-</svg>`;
+const scriptUrl = 'https://mapmyvisitors.com/map.js?d=TEST-FIXTURE&cl=ffffff&w=a';
+const statsUrl = 'https://mapmyvisitors.com/web/TESTFIXTURE';
 let bundle = '';
 let css = '';
 
@@ -32,7 +24,7 @@ test.beforeAll(async () => {
           const { theme } = useTheme();
           return <main data-fixture-theme={theme} style={{ padding: 24 }}>
             <ThemeToggle />
-            <VisitorMap imageUrl=${JSON.stringify(imageUrl)} statsUrl=${JSON.stringify(statsUrl)} />
+            <VisitorMap scriptUrl=${JSON.stringify(scriptUrl)} statsUrl=${JSON.stringify(statsUrl)} />
           </main>;
         }
         createRoot(document.getElementById('root')).render(
@@ -50,14 +42,14 @@ test.beforeAll(async () => {
   });
   bundle = result.outputFiles[0].text;
   const assets = path.resolve('dist/assets');
-  const stylesheets = (await readdir(assets)).filter(file => file.endsWith('.css'));
-  css = (await Promise.all(stylesheets.map(file => readFile(path.join(assets, file), 'utf8')))).join('\n');
+  css = (await Promise.all((await readdir(assets)).filter(file => file.endsWith('.css')).map(file => readFile(path.join(assets, file), 'utf8')))).join('\n');
 });
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, context }) => {
   await page.emulateMedia({ colorScheme: 'light' });
-  // Default deny for provider traffic; each test adds its local image response.
-  await page.route(/https:\/\/[^/]*flagcounter\.com\//, route => route.abort());
+  await context.route('**://mapmyvisitors.com/**', route => route.abort());
+  await context.route('**://*.flagcounter.com/**', route => route.abort());
+  await context.route('**://code.jquery.com/**', route => route.abort());
   await page.route(`**${fixturePath}.js`, route => route.fulfill({ contentType: 'text/javascript', body: bundle }));
   await page.route(`**${fixturePath}.css`, route => route.fulfill({ contentType: 'text/css', body: css }));
   await page.route(/\/__visitor-map-fixture__$/, route => route.fulfill({
@@ -66,139 +58,107 @@ test.beforeEach(async ({ page }) => {
   }));
 });
 
-test('visitor image loads eagerly once under StrictMode and survives theme rerenders', async ({ page }) => {
+test('the official script mounts once under StrictMode and survives theme changes', async ({ page, context }) => {
   let requests = 0;
-  await page.route(providerRoute, route => {
-    requests++;
-    return route.fulfill({ contentType: 'image/svg+xml', body: mockMap });
-  });
+  await context.route(mapScriptRoute, route => { requests++; return route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock() }); });
   await page.goto(fixturePath);
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-  const image = page.locator('.visitor-map img');
-  await expect(image).toHaveCount(1);
-  await expect(image).toHaveAttribute('loading', 'eager');
-  await expect(image).toHaveAttribute('src', imageUrl);
-  await expect(page.locator('.visitor-map a:has(img)')).toHaveAttribute('href', statsUrl);
-  await expect(page.locator('.visitor-map script')).toHaveCount(0);
-  expect(requests).toBe(1);
+  const frame = page.locator('.visitor-map iframe');
+  await expect(frame).toHaveCount(1);
+  await expect(frame).toHaveAttribute('loading', 'eager');
+  await expect(frame).toHaveAttribute('sandbox', 'allow-scripts allow-popups allow-popups-to-escape-sandbox');
+  const widget = page.frameLocator('.visitor-map iframe');
+  await expect(widget.locator('#mapmyvisitors')).toHaveAttribute('src', scriptUrl);
+  await expect(widget.locator('#mapmyvisitors-widget')).toHaveAttribute('href', statsUrl);
+  await expect(widget.locator('#mapmyvisitors-widget')).toHaveAttribute('target', '_blank');
+  await expect(page.locator('img')).toHaveCount(0);
   await page.getByRole('button', { name: 'Switch to dark mode' }).click();
   await expect(page.locator('main')).toHaveAttribute('data-fixture-theme', 'dark');
   await page.getByRole('button', { name: 'Switch to light mode' }).click();
-  await expect(page.locator('main')).toHaveAttribute('data-fixture-theme', 'light');
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-  await expect(image).toHaveAttribute('src', imageUrl);
   expect(requests).toBe(1);
-  await mkdir('output/site-review', { recursive: true });
-  await page.locator('.visitor-map').screenshot({ path: 'output/site-review/visitor-map-fixture.png' });
 });
 
-test('an image network failure offers Retry and the second request recovers', async ({ page }) => {
-  let attempts = 0;
-  await page.route(providerRoute, route => {
-    attempts++;
-    return attempts === 1 ? route.abort('failed') : route.fulfill({ contentType: 'image/svg+xml', body: mockMap });
-  });
+test('a script network failure offers Retry and the second request recovers', async ({ page, context }) => {
+  let requests = 0;
+  await context.route(mapScriptRoute, route => ++requests === 1 ? route.abort('failed') : route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock() }));
   await page.goto(fixturePath);
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'error');
   await expect(page.getByRole('status')).toHaveText('The visitor map is temporarily unavailable.');
   await page.getByRole('button', { name: 'Retry visitor map' }).click();
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
+  await expect(page.locator('.visitor-map iframe')).toHaveCount(1);
   await expect(page.getByRole('button', { name: 'Retry visitor map' })).toHaveCount(0);
-  await expect(page.locator('.visitor-map img')).toHaveCount(1);
-  expect(attempts).toBe(2);
+  expect(requests).toBe(2);
 });
 
-test('a pending image remains loading until it decodes and never times out after success', async ({ page }) => {
-  let release!: () => void;
-  const pending = new Promise<void>(resolve => { release = resolve; });
-  let requested = false;
+test('script onload is not success until map data has rendered', async ({ page, context }) => {
   await page.clock.install();
-  await page.route(providerRoute, async route => {
-    requested = true;
-    await pending;
-    await route.fulfill({ contentType: 'image/svg+xml', body: mockMap });
-  });
-  await page.goto(fixturePath, { waitUntil: 'domcontentloaded' });
-  await expect.poll(() => requested).toBe(true);
+  await context.route(mapScriptRoute, route => route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock(5_000) }));
+  await page.goto(fixturePath);
+  await expect(page.frameLocator('.visitor-map iframe').locator('.mapmyvisitors-loading')).toBeVisible();
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'loading');
-  await expect(page.getByRole('status')).toHaveText('Loading visitor map…');
   await expect(page.locator('.visitor-map-content')).toHaveAttribute('aria-busy', 'true');
-  release();
+  await page.clock.fastForward(5_001);
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-  await expect(page.getByRole('status')).toHaveText('Visitor map loaded.');
   await expect(page.locator('.visitor-map-content')).toHaveAttribute('aria-busy', 'false');
   await page.clock.fastForward(13_000);
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
+});
+
+test('a stalled data request times out and late rendering restores the map', async ({ page, context }) => {
+  await page.clock.install();
+  await context.route(mapScriptRoute, route => route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock(15_000) }));
+  await page.goto(fixturePath);
+  await expect(page.frameLocator('.visitor-map iframe').locator('.mapmyvisitors-loading')).toBeVisible();
+  await page.clock.fastForward(12_001);
+  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'timeout');
+  await expect(page.getByRole('button', { name: 'Retry visitor map' })).toBeVisible();
+  await page.clock.fastForward(3_001);
+  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
   await expect(page.getByRole('button', { name: 'Retry visitor map' })).toHaveCount(0);
 });
 
-test('a stalled image times out after 12 seconds and late completion restores the map', async ({ page }) => {
-  let release!: () => void;
-  const pending = new Promise<void>(resolve => { release = resolve; });
+test('retry replaces the old document and stale completion cannot change the new map', async ({ page, context }) => {
   let requests = 0;
   await page.clock.install();
-  await page.route(providerRoute, async route => {
-    requests++;
-    await pending;
-    await route.fulfill({ contentType: 'image/svg+xml', body: mockMap });
-  });
-  await page.goto(fixturePath, { waitUntil: 'domcontentloaded' });
-  await expect.poll(() => requests).toBe(1);
+  await context.route(mapScriptRoute, route => route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock(++requests === 1 ? 20_000 : 0) }));
+  await page.goto(fixturePath);
+  await expect(page.frameLocator('.visitor-map iframe').locator('.mapmyvisitors-loading')).toBeVisible();
+  await page.clock.fastForward(12_001);
+  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'timeout');
+  await page.getByRole('button', { name: 'Retry visitor map' }).click();
+  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
+  await page.clock.fastForward(10_000);
+  await expect(page.locator('.visitor-map iframe')).toHaveCount(1);
+  await expect(page.frameLocator('.visitor-map iframe').locator('#mapmyvisitors')).toHaveAttribute('src', /_retry=1/);
+  expect(requests).toBe(2);
+});
+
+test('unrelated messages cannot claim that a stalled widget is ready', async ({ page, context }) => {
+  await page.clock.install();
+  await context.route(mapScriptRoute, route => route.fulfill({ contentType: 'text/javascript', body: '/* Data never arrives. */' }));
+  await page.goto(fixturePath);
+  await page.evaluate(() => window.postMessage({ widget: 'mapmyvisitors', status: 'ready', height: 99999 }, '*'));
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'loading');
   await page.clock.fastForward(12_001);
   await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'timeout');
-  await expect(page.getByRole('status')).toHaveText('The visitor map is taking longer than expected to load.');
-  await expect(page.getByRole('button', { name: 'Retry visitor map' })).toBeVisible();
-  release();
-  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-  await expect(page.getByRole('button', { name: 'Retry visitor map' })).toHaveCount(0);
-  expect(requests).toBe(1);
 });
 
-test('Retry after a timeout starts a fresh image request and leaves only one map', async ({ page }) => {
-  let attempts = 0;
-  let release!: () => void;
-  const pending = new Promise<void>(resolve => { release = resolve; });
-  await page.clock.install();
-  await page.route(providerRoute, async route => {
-    attempts++;
-    if (attempts === 1) await pending;
-    await route.fulfill({ contentType: 'image/svg+xml', body: mockMap });
-  });
-  await page.goto(fixturePath, { waitUntil: 'domcontentloaded' });
-  await expect.poll(() => attempts).toBe(1);
-  await page.clock.fastForward(12_001);
-  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'timeout');
-  try {
-    await page.getByRole('button', { name: 'Retry visitor map' }).click();
-    await expect.poll(() => attempts).toBe(2);
-    await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-    await expect(page.locator('.visitor-map img')).toHaveCount(1);
-  } finally {
-    release();
-  }
-});
-
-test('a 1-pixel provider response is treated as a failed map instead of a successful load', async ({ page }) => {
-  await page.route(providerRoute, route => route.fulfill({
-    contentType: 'image/svg+xml',
-    body: '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"><rect width="1" height="1"/></svg>',
-  }));
+test('the map resizes from desktop to mobile without reloading or overflowing', async ({ page, context }) => {
+  let requests = 0;
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await context.route(mapScriptRoute, route => { requests++; return route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock() }); });
   await page.goto(fixturePath);
-  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'error');
-  await expect(page.getByRole('status')).toHaveText('The visitor map is temporarily unavailable.');
-  await expect(page.getByRole('button', { name: 'Retry visitor map' })).toBeVisible();
-});
-
-test('the loaded map fits a 375-pixel mobile viewport without horizontal overflow', async ({ page }) => {
+  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
+  const originalHeight = await page.locator('.visitor-map iframe').getAttribute('height');
   await page.setViewportSize({ width: 375, height: 812 });
-  await page.route(providerRoute, route => route.fulfill({ contentType: 'image/svg+xml', body: mockMap }));
-  await page.goto(fixturePath);
-  await expect(page.locator('.visitor-map')).toHaveAttribute('data-state', 'ready');
-  const image = page.locator('.visitor-map img');
-  await expect(image).toBeVisible();
-  expect(await image.evaluate(img => img.getBoundingClientRect().width)).toBeLessThanOrEqual(327);
+  const frame = page.locator('.visitor-map iframe');
+  await expect.poll(() => frame.getAttribute('height')).not.toBe(originalHeight);
+  await expect(page.frameLocator('.visitor-map iframe').locator('svg')).toBeVisible();
+  expect(await frame.evaluate(el => el.getBoundingClientRect().width)).toBeLessThanOrEqual(327);
   expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(375);
+  expect(requests).toBe(1);
   await mkdir('output/site-review', { recursive: true });
-  await page.locator('.visitor-map').screenshot({ path: 'output/site-review/visitor-map-fixture-mobile.png' });
+  await page.locator('.visitor-map').screenshot({ path: 'output/site-review/mapmyvisitors-fixture-mobile.png' });
 });

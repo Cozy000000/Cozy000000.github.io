@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+  <title>Visitor map</title>
+  <style>
+    html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }
+    body { font-family: Arial, sans-serif; }
+    #mapmyvisitors-widget { display: block; width: 100% !important; min-height: 0 !important; }
+    .mapmyvisitors-map { width: 100% !important; height: auto !important; aspect-ratio: 2.04; background-size: 100% 100%; }
+  </style>
+</head>
+<body>
+  <script>
+    // A real HTML address is needed: the provider's legacy jQuery resolves
+    // protocol-relative AJAX against location.protocol, not the <base> URL.
+    const params = new URLSearchParams(location.search);
+    const channel = params.get('channel');
+    const source = new URL(params.get('script'));
+    const statistics = new URL(params.get('stats'));
+    const permitted = url => url.protocol === 'https:' && url.hostname === 'mapmyvisitors.com' && !url.port && !url.username && !url.password;
+    if (!channel || !permitted(source) || source.pathname !== '/map.js' || !permitted(statistics) || !/^\/web\/[a-z0-9]+$/i.test(statistics.pathname)) {
+      throw new Error('Invalid visitor map configuration');
+    }
+    let ready = false;
+    let lastHeight = 0;
+    const send = detail => parent.postMessage({ widget: 'mapmyvisitors', channel, ...detail }, '*');
+    function inspect() {
+      const link = document.getElementById('mapmyvisitors-widget');
+      if (link) {
+        if (link.href !== statistics.href) link.href = statistics.href;
+        if (link.target !== '_blank') link.target = '_blank';
+        if (link.rel !== 'noopener noreferrer') link.rel = 'noopener noreferrer';
+        if (!link.getAttribute('aria-label')) link.setAttribute('aria-label', 'View visitor statistics on MapMyVisitors');
+      }
+      if (document.querySelector('.mapmyvisitors-map svg') && !document.querySelector('.mapmyvisitors-loading')) {
+        ready = true;
+        send({ status: 'ready' });
+      }
+      const height = Math.ceil(document.body.getBoundingClientRect().height);
+      if (height > 0 && height !== lastHeight) {
+        lastHeight = height;
+        send({ height });
+      }
+    }
+    new MutationObserver(inspect).observe(document.body, { childList: true, subtree: true, attributes: true });
+    new ResizeObserver(inspect).observe(document.body);
+    // Also respond if cached scripts finished before React attached its listener.
+    addEventListener('message', event => {
+      if (event.source === parent && event.data?.widget === 'mapmyvisitors' && event.data.channel === channel) inspect();
+    });
+    addEventListener('error', event => {
+      if (!ready && (event.target?.tagName === 'SCRIPT' || event.message)) send({ status: 'error' });
+    }, true);
+    const script = document.createElement('script');
+    script.id = 'mapmyvisitors';
+    script.src = source.href;
+    script.async = true;
+    document.body.append(script);
+  </script>
+</body>
+</html>

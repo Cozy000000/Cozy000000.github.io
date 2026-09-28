@@ -91,7 +91,7 @@ The site URL remains `https://cozy000000.github.io`, with a root deployment base
 
 - Homepage navigation now follows the reference layout; Blog and Diagram links live in the footer.
 - Existing publication links, BibTeX, education, awards, activities, legacy anchors, and the diagram embed are preserved.
-- No CV or citation metrics are displayed without corresponding personal data. The footer displays this site's Flag Counter world map automatically, with timeout handling and manual retry. See [visitor map details](docs/visitor-map.md).
+- No CV or citation metrics are displayed without corresponding personal data. The footer displays this site's MapMyVisitors interactive world map automatically, with timeout handling and manual retry. See [visitor map details](docs/visitor-map.md).
 - Jekyll templates, local Ruby dependencies and caches, old build output, unused Scholar crawler, template images, duplicate icons, and the temporary reference-capture script have been removed. The original source remains recoverable from Git history; original personal photographs, local avatar backups, the draft, and `LICENSE` are retained.
 
 ## Acknowledgments

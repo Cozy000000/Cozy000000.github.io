@@ -1,27 +1,32 @@
 # 访客地图
 
-主页页尾采用 [Flag Counter](https://flagcounter.com/) 的世界地图，以旗标显示访客的国家／地区。已通过官方免注册流程生成本站独立编号 `YywQ`，未提供邮箱、密码或购买服务。
+页尾采用 [MapMyVisitors](https://mapmyvisitors.com/) 的交互式世界地图。站点所有者在官方后台为 `https://cozy000000.github.io/` 创建插件，并提供了嵌入代码；当前使用的是本站独立统计，不是参考网站的编号。
 
-- [本站统计页面](https://info.flagcounter.com/YywQ)
-- 配置：`_data/profile.yml` → `visitorMap.imageUrl` 和 `visitorMap.statsUrl`
-- 原始地图尺寸：600 × 291，随页尾宽度缩放；浅色和深色模式共用同一张地图，避免切换主题产生额外请求。
+- [本站统计页面](https://mapmyvisitors.com/web/1c8ic)
+- 配置：`_data/profile.yml` → `visitorMap.scriptUrl` 和 `visitorMap.statsUrl`
+- 插件编号：`psXlrltPiDhoSHRqH7qVZdD0RPri7_n9JTaOkzyuadE`
+- 脚本使用 HTTPS；保留提供的 `cl=ffffff` 和自适应宽度 `w=a`。页尾最大宽度为 520px，地图随屏幕宽度缩放。
 
-## 原服务故障检查
-
-原 `clustrmaps.com/map_v2.js` 地址在此次检查的网络中无法建立 TLS 连接。替代服务 MapMyVisitors 的旧路径返回 404；其正确的 `map.js` 接口能访问，但原编号 `WLf9b66ilDZRnTA1p3jOxQp-T_d738h0cJKCEfhFM8s` 对应的地图图片显示 `Error: Incorrect map code!`。因此仅替换域名无法恢复原统计。
-
-本次选择可以直接生成独立地图的 Flag Counter 完成接入。新地图从接入时重新统计，没有导入原 ClustrMaps 历史记录。
+插件编号是公开嵌入参数，不是账号密码。需要更换时，从 [官方创建页面](https://mapmyvisitors.com/add/) 登录并为本站生成 Map Widget，把脚本地址和统计页链接写回配置。
 
 ## 展示与统计行为
 
-地图直接显示在页尾，图片自动加载，不再要求访客先展开折叠项。图片载入即触发服务统计，没有额外注入第三方 JavaScript。点击地图打开本站的统计页面。
+地图随页面自动加载。脚本放在隔离的 iframe 文档 `public/visitor-map.html` 内，避免第三方 jQuery、样式和 DOM ID 与 React 页面冲突；重试会整体更换该文档。它使用实际 HTML 地址，兼容插件旧版 jQuery 的相对协议请求，并通过 CSP 将请求升级为 HTTPS。点击地图或标题旁的 MapMyVisitors 链接，在新标签页打开本站统计。
 
-网络错误或 12 秒超时会显示提示与手动重试；不自动反复请求。这里显示的是 IP 推断的国家／地区，代理或 VPN 会影响地理位置。初始首条记录来自本次真实接入验证，不能把它当作自然访客数据。
+仅使用 `map.js` 交互插件，不同时加载提供的 `map.png` 图片计数器，以免产生额外统计请求。切换深浅色模式和调整窗口宽度不会重新加载插件。重新打开页面或手动重试会发起新请求，最终访问量如何去重由 MapMyVisitors 决定。
 
-真实接口和本地预览中的 Chrome 浏览器均已返回有效 PNG，并人工检查为世界地图而非错误图片。在同一页面切换 1440px／375px 和深浅色模式时，地图请求总数保持为 1。截图保存在 `output/site-review/visitor-map-<width>-<theme>.png`。其余自动化测试使用模拟响应，不提交额外测试浏览量。
+加载完成以地图数据渲染为准，不把脚本下载完成误判为地图就绪。网络错误或 12 秒超时会显示提示和手动重试；不自动反复请求。迟到的地图数据仍可恢复显示。服务故障只影响地图区域，不影响主页正文。
 
-## 免费服务的规则
+地图位置由服务根据访问者 IP 推断，代理或 VPN 会影响结果。新编号的历史数据独立保存，没有导入旧 ClustrMaps 或 Flag Counter 记录。
 
-根据 [Flag Counter FAQ](https://flagcounter.com/faq.html)，免费地图图片的统计展示约有 5 分钟延迟；连续超过 30 天未记录新访客的免费计数器会被清理。需要重建时，从 [官网](https://flagcounter.com/) 选择 Flag Map，跳过可选邮箱注册，将新图片和统计链接写回上述配置即可。不要复制其他网站的编号，否则会合并访问数据。
+## 本地检查
 
-把 `visitorMap` 设为 `null` 可以关闭这个模块。服务故障只影响地图区域，不影响主页正文。
+浏览器自动化测试模拟第三方脚本及延迟数据，覆盖首次加载、失败重试、超时后恢复、旧请求清理、主题切换和手机宽度；不向真实统计服务提交测试浏览量。真实插件的人工接入检查可能计入少量验证访问，不能把这些记录当作自然访客。
+
+2026-09-28 已在本地 Chrome 中验证真实插件：1440px／375px、深浅两种主题均显示世界地图和访问统计，无横向溢出、请求失败或脚本错误。在同一页面切换这些状态时，`map.js` 只请求一次，未请求 `map.png`。截图为忽略提交的 `output/site-review/mapmyvisitors-<width>-<theme>.png`；请求及布局记录见同目录的 `mapmyvisitors-real-check.json`。这次检查验证本地构建，不代表已发布到 GitHub Pages。
+
+把 `visitorMap` 设为 `null` 可以关闭这个模块。
+
+## 历史服务
+
+原 ClustrMaps 脚本在先前检查中无法建立 TLS 连接，直接套用原编号到 MapMyVisitors 也未被接受，随后临时改为 Flag Counter `YywQ`。本次以所有者提供的新 MapMyVisitors 编号替换；运行代码不再请求旧服务。先前的配置仍可从 Git 历史查阅。

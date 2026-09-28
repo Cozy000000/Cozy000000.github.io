@@ -1,10 +1,14 @@
 import { test, expect } from '@playwright/test';
 import { mkdir } from 'node:fs/promises';
+import { mapScriptRoute, mapWidgetMock } from './mapmyvisitors-fixture';
 
-test.beforeEach(async ({ page }) => {
+test.beforeEach(async ({ page, context }) => {
   await page.route('https://viewer.diagrams.net/**', route => route.fulfill({ contentType: 'text/html', body: '<p>Diagram embed loaded.</p>' }));
   // Never record automated site checks as real visitors.
-  await page.route('https://*.flagcounter.com/**', route => route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="600" height="291"><rect width="600" height="291" fill="#f0ece9"/><text x="20" y="145" fill="#202127">Visitor map — automated test fixture</text></svg>' }));
+  await context.route('**://mapmyvisitors.com/**', route => route.abort());
+  await context.route('**://*.flagcounter.com/**', route => route.abort());
+  await context.route('**://code.jquery.com/**', route => route.abort());
+  await context.route(mapScriptRoute, route => route.fulfill({ contentType: 'text/javascript', body: mapWidgetMock() }));
 });
 
 for (const width of [375, 768, 1440]) {
@@ -38,16 +42,18 @@ for (const width of [375, 768, 1440]) {
   }
 }
 
-test('footer automatically displays the configured visitor map and its statistics link', async ({ page }) => {
+test('footer automatically displays the configured visitor map and its statistics link', async ({ page, context }) => {
   let requests = 0;
-  page.on('request', request => { if (new URL(request.url()).hostname.endsWith('.flagcounter.com')) requests++; });
+  context.on('request', request => { if (new URL(request.url()).hostname === 'mapmyvisitors.com') requests++; });
   await page.goto('/');
   const map = page.locator('.site-footer .visitor-map');
   await expect(map).toHaveAttribute('data-state', 'ready');
   await map.scrollIntoViewIfNeeded();
   await expect(map.getByRole('heading', { name: 'Visitors around the world' })).toBeVisible();
-  await expect(map.locator('img')).toHaveAttribute('src', /s01\.flagcounter\.com\/map\/YywQ\//);
-  await expect(map.locator('a').filter({ has: page.locator('img') })).toHaveAttribute('href', 'https://info.flagcounter.com/YywQ');
+  await expect(map.frameLocator('iframe').locator('#mapmyvisitors')).toHaveAttribute('src', /mapmyvisitors\.com\/map\.js\?d=psXlrltPiDhoSHRqH7qVZdD0RPri7_n9JTaOkzyuadE/);
+  await expect(map.locator('.visitor-map-provider')).toHaveAttribute('href', 'https://mapmyvisitors.com/web/1c8ic');
+  await expect(map.frameLocator('iframe').locator('#mapmyvisitors-widget')).toHaveAttribute('href', 'https://mapmyvisitors.com/web/1c8ic');
+  await expect(map.locator('img')).toHaveCount(0);
   expect(requests).toBe(1);
 });
 
@@ -109,7 +115,7 @@ test('page addresses, directory index URLs, redirects and ordinary 404 work on s
     await page.reload();
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
   }
-  await expect(page.locator('iframe')).toHaveAttribute('src', /viewer\.diagrams\.net/);
+  await expect(page.locator('.diagram-frame iframe')).toHaveAttribute('src', /viewer\.diagrams\.net/);
   await page.goto('/blog/');
   await expect(page.getByText('No posts published yet.')).toBeVisible();
   await expect(page.locator('link[rel="canonical"]')).toHaveAttribute('href', 'https://cozy000000.github.io/blog/');
