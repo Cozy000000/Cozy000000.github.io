@@ -27,6 +27,8 @@ export interface Profile {
     affiliationUrl: string;
     advisor: string;
     advisorUrl: string;
+    coadvisor?: string;
+    coadvisorUrl?: string;
     location: string;
     email: string;
     scholar: string;

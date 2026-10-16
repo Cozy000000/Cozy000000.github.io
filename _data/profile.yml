@@ -14,6 +14,8 @@ author:
   affiliationUrl: https://www.hkust-gz.edu.cn/
   advisor: Prof. Zeyi Wen
   advisorUrl: https://zeyiwen.github.io/
+  coadvisor: Prof. Xiaowen Chu
+  coadvisorUrl: https://sites.google.com/view/chuxiaowen
   location: Guangzhou, China
   email: czy427214@gmail.com
   scholar: https://scholar.google.com/citations?user=xwUzq7wAAAAJ&hl=en&oi=ao
@@ -94,7 +96,7 @@ education:
   - period: '2023 — Present'
     school: Hong Kong University of Science and Technology (Guangzhou)
     degree: Undergraduate in Artificial Intelligence
-    detail: 'Advisor: Prof. Zeyi Wen'
+    detail: 'Advisors: Prof. Zeyi Wen and Prof. Xiaowen Chu'
     current: true
   - period: '2020 — 2023'
     school: Chengdu No. 7 High School
